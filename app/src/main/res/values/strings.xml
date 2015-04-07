@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ADDNG</string>
+
+    <string name="totalP">TOTAL PATIENTS</string>
+    <string name="activeP">ALL ACTIVE PATIENTS</string>
+    <string name="type1P">ALL TYPE 1 PATIENTS</string>
+    <string name="type2P">ALL TYPE 2 PATIENTS</string>
+    <string name="otherP">OTHER PATIENTS</string>
+    <string name="inactiveP">ALL INACTIVE PATIENTS</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_dashboard_view">dashboard_view</string>
+
+    <string name="hello_world">Hello world!</string>
+</resources>
