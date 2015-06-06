@@ -11,10 +11,19 @@ import com.parse.ParseObject;
 public class Patient extends ParseObject{
 
     private String id; // Patient id (ObjectID)
-    private String name;// name of the centre
+    private String name;// name of the patient
     private Boolean flag;// active_flag
+private String centre_code;
 
     public Patient(){
+
+    }
+
+    Patient(String centreId, String centreName, Boolean active_flag,String centre) {
+        id = centreId;
+        name = centreName;
+        flag=active_flag;
+        centre_code=centre;
 
     }
 
@@ -44,9 +53,19 @@ public class Patient extends ParseObject{
         this.flag = flag;
     }
 
+    public String getParseObject(){
+        return centre_code;
+    }
+
+    public String setParseObject(String centre) {
+        this.centre_code = centre;
+        return centre_code;
+    }
+
+
     @Override
     public String toString() {
-        return this.getName();
+        return this.getName()+" " + this.getFlag();
     }
 
 

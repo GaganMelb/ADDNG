@@ -18,10 +18,10 @@ public class Centre extends ParseObject{
     }
 
 
-    Centre(String centreId, String centreName, int numPatients) {
-        id = centreId;
+    Centre(String centreName) {
+
         name = centreName;
-        numberOfPatients = numPatients;
+
 
     }
 
@@ -46,7 +46,7 @@ public class Centre extends ParseObject{
 
     @Override
     public String toString() {
-        return this.getName()+ " " + "-" + " "+this.numberOfPatients;
+        return this.getName();
     }
 
 
