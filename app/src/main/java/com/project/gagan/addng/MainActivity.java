@@ -1,34 +1,53 @@
 package com.project.gagan.addng;
 
-import android.app.Application;
+
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.widget.ImageView;
 import com.parse.CountCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener{
+/*
+ * Created by Gagan on 11-May-15.
+ */
+
+
+/*
+This is the home page of the application and shows more options to choose from. For example,
+Centre-Reports, Summary, Settings (for push notifications),and Log out.
+ */
+
+public class MainActivity extends Activity implements View.OnClickListener{
 
     // Declare UI elements
-    TextView tvTotal;
-    TextView tvActive;
-    TextView tvType1;
-    TextView tvType2;
-    TextView tvOther;
-    TextView tvInactive;
+    ImageView centreRecords;
+    ImageView summary;
+
+    // Declare integers for counts
+    int vic_MEL_RCH;
+    int wa_PER_PMH;
+    int nsw_SYD_CHW;
+    int sa_ADL_WCH;
+    int qld_BRS_LCH;
+
+
+
+    // Declare Strings for centre_names
+    String vic_MEL_RCH_n = "VIC-MEL-RCH";
+    String wa_PER_PMH_n="WA-PER-PMH";
+    String nsw_SYD_CHW_n="NSW-SYD-CHW";
+    String sa_ADL_WCH_n="SA-ADL-WCH";
+    String qld_BRS_LCH_n="QLD-BRS-LCH";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,133 +55,117 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseObject.registerSubclass(Patient.class);
+        ParseObject.registerSubclass(Centre.class);
 
-        tvTotal = (TextView)findViewById(R.id.total);
-        ParseQuery<ParseObject> queryTotal = new ParseQuery<ParseObject>("Patient");
-        queryTotal.countInBackground(new CountCallback(){
+        //Centre Name = WA-PER-PMH , id = oLg0S3YTvf
+        ParseObject objWA_PER_PMH = ParseObject.createWithoutData("Centre", "oLg0S3YTvf");
+        ParseQuery<ParseObject> queryWA = ParseQuery.getQuery("Patient");
+        queryWA.whereEqualTo("centre_id", objWA_PER_PMH);
+        //queryWA.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        queryWA.countInBackground(new CountCallback() {
             public void done(int count, ParseException e) {
                 if (e == null) {
-                    tvTotal.setText(tvTotal.getText().toString()+"--"+count);
+                    wa_PER_PMH = count;
                 } else {
                     Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
                 }
             }
         });
-        tvTotal.setOnClickListener(this);
 
-
-        tvActive = (TextView)findViewById(R.id.active);
-        ParseQuery<ParseObject> queryActive = new ParseQuery<ParseObject>("Patient");
-        queryActive.whereEqualTo("active_flag",true);
-        queryActive.countInBackground(new CountCallback(){
+        //Centre Name = VIC-MEL-RCH, id = s4Ou9IqU1t
+        ParseObject objVIC_MEL_RCH = ParseObject.createWithoutData("Centre", "s4Ou9IqU1t");
+        ParseQuery<ParseObject> queryVIC = ParseQuery.getQuery("Patient");
+        queryVIC.whereEqualTo("centre_id", objVIC_MEL_RCH);
+        //queryVIC.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        queryVIC.countInBackground(new CountCallback() {
             public void done(int count, ParseException e) {
                 if (e == null) {
-                    tvActive.setText(tvActive.getText().toString()+"--"+count);
-                     } else {
-                         Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
-                         }
-                         }
-    });
-        tvActive.setOnClickListener(this);
-
-
-        tvType1 = (TextView)findViewById(R.id.type1);
-        ParseQuery<ParseObject> queryType1 = new ParseQuery<ParseObject>("Patient");
-        queryType1.whereEqualTo("diabetes_type","type 1");
-        queryType1.countInBackground(new CountCallback(){
-            public void done(int count, ParseException e) {
-                if (e == null) {
-                    tvType1.setText(tvType1.getText().toString()+System.getProperty("line.separator")+"--"+count);
+                    vic_MEL_RCH = count;
                 } else {
                     Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
                 }
             }
         });
-        tvType1.setOnClickListener(this);
 
-        tvType2 = (TextView)findViewById(R.id.type2);
-        ParseQuery<ParseObject> queryType2 = new ParseQuery<ParseObject>("Patient");
-        queryType2.whereEqualTo("diabetes_type","type 2");
-        queryType2.countInBackground(new CountCallback(){
+        //Centre Name = SA-ADL-WCH, id = VqtbTZkZEs
+        ParseObject objSA_ADL_WCH = ParseObject.createWithoutData("Centre", "VqtbTZkZEs");
+        ParseQuery<ParseObject> querySA = ParseQuery.getQuery("Patient");
+       querySA.whereEqualTo("centre_id", objSA_ADL_WCH);
+        //querySA.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        querySA.countInBackground(new CountCallback() {
             public void done(int count, ParseException e) {
                 if (e == null) {
-                    tvType2.setText(tvType2.getText().toString()+System.getProperty("line.separator")+"--"+count);
+                    sa_ADL_WCH = count;
                 } else {
                     Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
                 }
             }
         });
-        tvType2.setOnClickListener(this);
 
-        tvOther = (TextView)findViewById(R.id.other);
-        tvOther.setOnClickListener(this);
-
-        tvInactive = (TextView)findViewById(R.id.inactive);
-        ParseQuery<ParseObject> queryInActive = new ParseQuery<ParseObject>("Patient");
-        queryInActive.whereEqualTo("active_flag",false);
-        queryInActive.countInBackground(new CountCallback() {
+        //Centre Name = QLD-BRS-LCH, id = A0N3jdanIT
+        ParseObject objQLD_BRS_LCH = ParseObject.createWithoutData("Centre", "A0N3jdanIT");
+        ParseQuery<ParseObject> queryQLD =ParseQuery.getQuery("Patient");
+        queryQLD.whereEqualTo("centre_id", objQLD_BRS_LCH);
+        //queryQLD.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        queryQLD.countInBackground(new CountCallback() {
             public void done(int count, ParseException e) {
                 if (e == null) {
-                    tvInactive.setText(Html.fromHtml(tvInactive.getText().toString() + "<br/>" + "<font color=#ffd700>" + count + "</font>"))
-                    ;
+                    qld_BRS_LCH = count;
                 } else {
                     Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
                 }
             }
         });
-        tvInactive.setOnClickListener(this);
+
+        //Centre Name = NSW-SYD-CHW, id = mPVcmqXNvn
+        ParseObject objNSW_SYD_CHW = ParseObject.createWithoutData("Centre", "mPVcmqXNvn");
+        ParseQuery<ParseObject> queryNSW =ParseQuery.getQuery("Patient");
+        queryNSW.whereEqualTo("centre_id", objNSW_SYD_CHW);
+       // queryNSW.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        queryNSW.countInBackground(new CountCallback() {
+            public void done(int count, ParseException e) {
+                if (e == null) {
+                    nsw_SYD_CHW = count;
+                } else {
+                    Log.d(getClass().getSimpleName(), "Error: " + e.getMessage());
+                }
+            }
+        });
+
+        summary = (ImageView)findViewById(R.id.summary_button);
+        summary.setOnClickListener(this);
+
+        centreRecords = (ImageView)findViewById(R.id.centreR);
+        centreRecords.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
-        Intent intent=new Intent(MainActivity.this,dashboard_view.class);
+
+        Intent intent = new Intent();
         Bundle label = new Bundle();
+
+        String[] centreNames={vic_MEL_RCH_n,sa_ADL_WCH_n,wa_PER_PMH_n,qld_BRS_LCH_n,nsw_SYD_CHW_n};
+        double[] numberOfPatients= {vic_MEL_RCH,sa_ADL_WCH,wa_PER_PMH,qld_BRS_LCH,nsw_SYD_CHW};
         switch(view.getId()) {
-            case R.id.total: // R.id.textView0 (Total Patients)
-                // pass label
-                label.putString("label",tvTotal.getText().toString());
+
+            case R.id.summary_button: // R.id.summary_button (Total Patients in Pie-Charts : State-wise)
+
+                intent=new Intent(MainActivity.this,PieGraph.class);
+                //pass label
+                label.putDoubleArray("numberOfPatients",numberOfPatients);
+
+                label.putStringArray("nameOfCentres",centreNames);
+
                 // add bundle to intent
                 intent.putExtras(label);
                 break;
 
-            case R.id.active: // R.id.textView1 (Active Patients)
 
-                // pass label
-                label.putString("label",tvActive.getText().toString());
-                // add bundle to intent
-                intent.putExtras(label);
-                break;
+            case R.id.centreR: // R.id.centreR (Centre Reports)
+                intent=new Intent(MainActivity.this,CentreReports.class);
 
-            case R.id.type1: // R.id.textView2 (Type 1 Patients)
-
-
-                // pass label
-                label.putString("label",tvType1.getText().toString());
-                // add bundle to intent
-                intent.putExtras(label);
-                break;
-            case R.id.type2: // R.id.textView3 (Type 2 Patients)
-
-                // pass label
-                label.putString("label",tvType2.getText().toString());
-                // add bundle to intent
-                intent.putExtras(label);
-                break;
-            case R.id.other: // R.id.textView4 (Other Patients)
-
-                // pass label
-                label.putString("label",tvOther.getText().toString());
-                // add bundle to intent
-                intent.putExtras(label);
-                break;
-            case R.id.inactive: // R.id.textView5 (Inactive Patients)
-
-                // pass label
-                label.putString("label",tvInactive.getText().toString());
-                // add bundle to intent
-                intent.putExtras(label);
                 break;
         }
         startActivity(intent);
@@ -174,6 +177,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -182,14 +186,27 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+
+            case R.id.action_settings:// Setting option to set for push notifications
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+
+            case R.id.logout:
+                // Call the Parse log out method
+                ParseUser.logOut();
+                // Start and intent for the dispatch activity
+                Intent intent = new Intent(MainActivity.this, SessionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+
+
     }
 
 
